@@ -11,7 +11,12 @@ async function submitHandler(e) {
    } else {
       console.log(input.value.trim());
    }
-   const cityInfo = await getGeo(input.value.trim());
+
+
+   const cityName = input.value.trim();
+   input.value = '';//сброс значения из input
+
+   const cityInfo = await getGeo(cityName);
    // console.log(cityInfo);
    // console.log(cityInfo[0]['lat']);
    // console.log(cityInfo[0]['lon']);//для этого из данных нужно извлечь lat и lon
@@ -64,10 +69,35 @@ function renderWeatherData(data) {
    const city = document.querySelector('.weather__city');
    const humidity = document.querySelector('#humidity');
    const speed = document.querySelector('#speed');
-   temp.innerText = data.temp;
+   const img = document.querySelector('.weather__img');
+   temp.innerText = Math.round(data.temp) + '°c';
    city.innerText = data.name;
-   humidity.innerText = data.humidity;
-   speed.innerText = data.speed;
+   humidity.innerText = data.humidity + '%';
+   speed.innerText = Math.round(data.speed) + ' km/h';
 
+
+
+   const fileNames = {
+      'Clouds': 'clouds',
+      'Clear': 'clear',
+      'Rain': 'rain',
+      'Snow': 'snow',
+   }
+
+   if (fileNames[data.main]) {
+      img.src = `./image/${fileNames[data.main]}.png`;
+   } else { console.log('error'); }
+
+   // if (fileNames[data.main] === fileNames[data.main[Clouds]]) {
+   //    img.src = './image/clouds.png'
+   // } else if (fileNames[data.main] === fileNames[data.main[Snow]]) {
+   //    img.src = './image/snow.png'
+   // } else if (fileNames[data.main] === fileNames[data.main[Clear]]) {
+   //    img.src = './image/clear.png'
+   // }
+   // else {
+   //    img.src = './image/rain.png'
+   // }
 
 }
+
